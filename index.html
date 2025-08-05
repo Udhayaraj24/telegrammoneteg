@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monetag Ad Integration</title>
+
+  <!-- Monetag Ad Script -->
+  <script src='//libtl.com/sdk.js' data-zone='9672953' data-sdk='show_9672953'></script>
+</head>
+<body>
+  <button id="showAdBtn">Show Ad & Earn Reward</button>
+
+  <script>
+    document.getElementById('showAdBtn').onclick = function () {
+      if (typeof window['show_9672953'] === 'function') {
+        window['show_9672953']();
+        alert("Ad shown! Reward logic can follow here.");
+      } else {
+        alert("Ad not available. Try again later.");
+        console.warn("Monetag function show_9672953 not loaded.");
+      }
+    };
+  </script>
+</body>
+</html>
