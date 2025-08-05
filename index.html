@@ -4,20 +4,61 @@
   <meta charset="UTF-8">
   <title>Monetag Ad Integration</title>
 
-  <!-- Monetag Ad Script -->
+  <!-- Monetag SDK -->
   <script src='//libtl.com/sdk.js' data-zone='9672953' data-sdk='show_9672953'></script>
 </head>
 <body>
-  <button id="showAdBtn">Show Ad & Earn Reward</button>
+  <h2>Monetag Ad Formats</h2>
+
+  <button id="rewardedBtn">Show Rewarded Ad</button>
+  <button id="popupBtn">Show Rewarded Popup</button>
+  <button id="inAppBtn">Start In-App Interstitial</button>
 
   <script>
-    document.getElementById('showAdBtn').onclick = function () {
-      if (typeof window['show_9672953'] === 'function') {
-        window['show_9672953']();
-        alert("Ad shown! Reward logic can follow here.");
+    // ✅ Rewarded Interstitial (Click button to show ad and reward after watching)
+    document.getElementById('rewardedBtn').onclick = function () {
+      if (typeof show_9672953 === 'function') {
+        show_9672953().then(() => {
+          alert('You have seen an ad! Reward unlocked.');
+          // Add your reward logic here
+        }).catch(e => {
+          console.error("Ad error:", e);
+          alert('Ad failed to load.');
+        });
       } else {
-        alert("Ad not available. Try again later.");
-        console.warn("Monetag function show_9672953 not loaded.");
+        alert('Ad function not ready. Try again later.');
+      }
+    };
+
+    // ✅ Rewarded Popup (smaller ad popup style)
+    document.getElementById('popupBtn').onclick = function () {
+      if (typeof show_9672953 === 'function') {
+        show_9672953('pop').then(() => {
+          alert('Popup ad completed! Reward granted.');
+        }).catch(e => {
+          console.warn('Popup ad error:', e);
+        });
+      } else {
+        alert('Popup ad system not ready.');
+      }
+    };
+
+    // ✅ In-App Interstitial (auto showing every few mins)
+    document.getElementById('inAppBtn').onclick = function () {
+      if (typeof show_9672953 === 'function') {
+        show_9672953({
+          type: 'inApp',
+          inAppSettings: {
+            frequency: 2,       // Show 2 ads
+            capping: 0.1,       // Within 0.1 hours (6 minutes)
+            interval: 30,       // 30 seconds between ads
+            timeout: 5,         // Delay before first ad
+            everyPage: false    // Do not reset on page change
+          }
+        });
+        alert('In-app interstitial started. Ads will show automatically.');
+      } else {
+        alert('In-App system not initialized yet.');
       }
     };
   </script>
